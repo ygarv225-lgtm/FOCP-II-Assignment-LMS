@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+string solve(int n, vector<int> arr) {
+
+    sort(arr.begin(), arr.end(), greater<int>());
+
+    long long alex = 0, bob = 0;
+
+    unordered_set<int> alexUsed, bobUsed;
+    vector<int> taken(n, 0);
+
+    bool turnAlex = true;
+    int remaining = n;
+
+    while (remaining > 0) {
+
+        bool moved = false;
+
+        for (int i = 0; i < n; i++) {
+
+            if (taken[i])
+                continue;
+
+            if (turnAlex) {
+
+                if (alexUsed.find(arr[i]) == alexUsed.end()) {
+                    alex += arr[i];
+                    alexUsed.insert(arr[i]);
+                    taken[i] = 1;
+                    moved = true;
+                    remaining--;
+                    break;
+                }
+
+            } else {
+
+                if (bobUsed.find(arr[i]) == bobUsed.end()) {
+                    bob += arr[i];
+                    bobUsed.insert(arr[i]);
+                    taken[i] = 1;
+                    moved = true;
+                    remaining--;
+                    break;
+                }
+            }
+        }
+
+        if (!moved)
+            break;
+
+        turnAlex = !turnAlex;
+    }
+
+    if (alex > bob)
+        return "Alex";
+    else
+        return "Bob";
+}
+
+int main() {
+
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+
+        int n;
+        cin >> n;
+
+        vector<int> arr(n);
+
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+
+        cout << solve(n, arr) << '\n';
+    }
+
+    return 0;
+}
